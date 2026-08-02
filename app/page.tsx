@@ -1,665 +1,364 @@
 "use client";
 
-import { useState } from "react";
 import {
   ClipboardList,
   UserCheck,
-  UserCog,
   ShieldCheck,
-  ArrowRight,
+  UserCog,
 } from "lucide-react";
 
-const sections = [
+const sopItems = [
   {
-    id: "sop",
-    title: "SOP Video Editing",
-    description:
-      "Alur proses jasa video editing dari reservasi hingga file akhir.",
-    icon: ClipboardList,
+    title: "1. Persetujuan",
+    text: "Sebelum melakukan pemesanan atau reservasi jasa video editing, klien wajib membaca, memahami, dan menyetujui seluruh ketentuan yang berlaku.",
   },
   {
-    id: "reservasi",
-    title: "Ketentuan Reservasi",
-    description:
-      "Ketentuan yang perlu diperhatikan sebelum melakukan reservasi.",
-    icon: UserCheck,
+    title: "2. Reservasi",
+    text: "Klien mengisi formulir reservasi dengan lengkap sesuai detail proyek, kemudian mengirimkannya kepada admin.",
   },
   {
-    id: "klien",
-    title: "Ketentuan Klien",
-    description:
-      "Hal-hal yang wajib diperhatikan oleh klien.",
-    icon: ShieldCheck,
+    title: "3. Review Harga",
+    text: "Setelah formulir diterima, admin akan melakukan peninjauan dan memberikan estimasi biaya jasa editing berdasarkan kebutuhan proyek.",
   },
   {
-    id: "editor",
-    title: "Ketentuan Editor",
-    description:
-      "Ketentuan dan tanggung jawab editor.",
-    icon: UserCog,
+    title: "4. Kesepakatan Harga",
+    text: "Setelah estimasi disetujui, proyek dinyatakan deal. Untuk transaksi di atas Rp50.000, klien wajib membayar uang muka (DP) sebelum proses editing dimulai.",
+  },
+  {
+    title: "5. Pengiriman Aset",
+    text: "Klien mengirimkan seluruh aset yang diperlukan, seperti video, logo, naskah, rekaman suara, musik, maupun materi pendukung lainnya.",
+  },
+  {
+    title: "6. Proses Editing",
+    text: "Editor mengerjakan proyek sesuai dengan brief dan materi yang telah diberikan oleh klien.",
+  },
+  {
+    title: "7. Review & Revisi",
+    text: "Editor mengirimkan hasil editing tahap pertama kepada klien untuk ditinjau. Revisi dilakukan sesuai dengan ketentuan layanan yang berlaku.",
+  },
+  {
+    title: "8. Pelunasan",
+    text: "Setelah seluruh proses review dan revisi selesai serta hasil akhir telah disetujui, klien wajib melunasi sisa pembayaran.",
+  },
+  {
+    title: "9. Pengiriman Hasil Akhir",
+    text: "Setelah pembayaran lunas, editor akan mengirimkan video final dengan kualitas Full HD tanpa watermark.",
+  },
+  {
+    title: "10. Penyimpanan File",
+    text: "File proyek dan hasil akhir akan disimpan di Google Drive selama 7 (tujuh) hari sejak video dikirim kepada klien. Setelah masa penyimpanan berakhir, file akan dihapus secara permanen. Klien diharapkan segera mengunduh dan menyimpan file tersebut.",
   },
 ];
 
-export default function Home() {
-  const [activeSection, setActiveSection] = useState("sop");
+const reservasiItems = [
+  "Dengan melakukan reservasi, klien dianggap telah membaca, memahami, dan menyetujui seluruh SOP serta ketentuan layanan yang berlaku.",
 
-  const scrollToSection = (id: string) => {
-    setActiveSection(id);
+  "Seluruh proses, mulai dari reservasi hingga pelunasan, mengikuti SOP yang telah ditetapkan demi menjaga keamanan dan kenyamanan transaksi bagi klien maupun editor.",
 
-    document.getElementById(id)?.scrollIntoView({
-      behavior: "smooth",
-      block: "start",
-    });
-  };
+  "Tidak menerima proyek dengan deadline kurang dari 24 jam.",
 
+  "Tidak menerima proyek yang mengandung watermark, promosi, atau unsur judi online, serta konten yang melanggar hukum atau bersifat menyesatkan.",
+
+  "Paket Basic dan Pro mengharuskan klien memiliki konsep atau briefing yang jelas sebelum proses editing dimulai.",
+
+  "Reservasi tetap dibuka pada hari Sabtu dan Minggu, namun proses pengerjaan akan dimulai pada hari kerja berikutnya.",
+
+  "Klien wajib membaca seluruh ketentuan yang tercantum pada sorotan Instagram @asadigitals_ sebelum melakukan reservasi.",
+];
+
+const klienItems = [
+  "Pergantian lagu setelah proses editing dimulai tidak dapat dilakukan. Apabila tetap ingin mengganti lagu, perubahan tersebut akan dianggap sebagai proyek baru atau dikenakan biaya tambahan.",
+
+  "Permintaan percepatan deadline tidak tersedia. Apabila membutuhkan prioritas pengerjaan, klien dapat memilih layanan Fast Track.",
+
+  "Transaksi di atas Rp50.000 wajib membayar DP minimal 50% sebelum proyek dikerjakan.",
+
+  "Seluruh aset proyek wajib diunggah ke Google Drive dan diberi nama yang jelas agar memudahkan proses editing.",
+
+  "Briefing yang telah disetujui tidak dapat diubah di tengah proses pengerjaan. Perubahan konsep akan dianggap sebagai revisi mayor atau proyek baru.",
+
+  "Klien wajib melunasi sisa pembayaran sebelum video final tanpa watermark dikirimkan.",
+];
+
+const editorItems = [
+  "Wajib menyelesaikan proyek sesuai deadline yang telah disepakati.",
+
+  "Menjaga kerahasiaan seluruh data dan aset milik klien.",
+
+  "Mengerjakan video sesuai briefing dan materi yang telah diberikan.",
+
+  "Menerima revisi sesuai dengan batas revisi pada paket yang dipilih.",
+
+  "Berhak menolak proyek yang bertentangan dengan hukum, etika, atau kebijakan layanan dengan memberikan penjelasan kepada klien.",
+
+  "File proyek dan hasil akhir akan disimpan selama 7 hari setelah video final dikirim. Setelah masa penyimpanan berakhir, file dapat dihapus secara permanen.",
+];
+
+function GlassCard({
+  children,
+  className = "",
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
   return (
-    <main className="min-h-screen bg-base-100 text-base-content">
+    <div
+      className={`
+        rounded-[2rem]
+        border-2
+        border-white/40
+        bg-white/[0.12]
+        backdrop-blur-xl
+        shadow-[0_20px_60px_rgba(0,0,0,0.20)]
+        ${className}
+      `}
+    >
+      {children}
+    </div>
+  );
+}
+
+function SectionHeader({
+  icon,
+  title,
+}: {
+  icon: React.ReactNode;
+  title: string;
+}) {
+  return (
+    <div className="mb-8 flex items-center justify-center gap-3">
+      <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-white/15 border border-white/30">
+        {icon}
+      </div>
+
+      <h2 className="text-center text-2xl font-semibold tracking-wide md:text-3xl">
+        {title}
+      </h2>
+    </div>
+  );
+}
+
+function BulletList({ items }: { items: string[] }) {
+  return (
+    <ul className="space-y-5 text-base leading-relaxed md:text-lg">
+      {items.map((item, index) => (
+        <li key={index} className="flex gap-4">
+          <span className="mt-2.5 h-2 w-2 shrink-0 rounded-full bg-white" />
+
+          <span className="text-white/95">
+            {item}
+          </span>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+export default function Home() {
+  return (
+    <main className="min-h-screen overflow-hidden bg-[#062b63] text-white">
 
       {/* =========================================
-          HERO
+          BACKGROUND
       ========================================= */}
 
-      <section className="hero min-h-[70vh]">
-        <div className="hero-content text-center px-5">
-          <div className="max-w-3xl">
+      <div className="fixed inset-0 -z-0 overflow-hidden">
 
-            <div className="badge badge-primary badge-lg mb-6">
-              ASA DIGITAL SPACE
-            </div>
+        <div className="absolute inset-0 bg-gradient-to-br from-[#062b63] via-[#073e87] to-[#00c9d8]" />
 
-            <h1 className="text-5xl md:text-7xl font-black leading-tight">
-              SOP & Ketentuan
-            </h1>
+        <div className="absolute -left-40 top-20 h-[500px] w-[500px] rounded-full bg-cyan-400/20 blur-[120px]" />
 
-            <p className="text-lg md:text-xl opacity-70 mt-6 leading-relaxed">
-              Sebelum melakukan reservasi, pastikan kamu telah
-              membaca, memahami, dan menyetujui seluruh ketentuan
-              yang berlaku.
-            </p>
+        <div className="absolute -right-40 top-[35%] h-[600px] w-[600px] rounded-full bg-blue-500/30 blur-[140px]" />
 
-            <button
-              onClick={() => scrollToSection("sop")}
-              className="btn btn-primary btn-lg mt-8"
-            >
-              Baca Ketentuan
-              <ArrowRight size={20} />
-            </button>
+        <div className="absolute bottom-[-200px] left-[20%] h-[500px] w-[500px] rounded-full bg-cyan-400/20 blur-[130px]" />
 
-          </div>
-        </div>
-      </section>
-
-      {/* =========================================
-          NAVIGATION
-      ========================================= */}
-
-      <section className="px-5 pb-16">
-        <div className="max-w-6xl mx-auto">
-
-          <div className="grid sm:grid-cols-2 xl:grid-cols-4 gap-5">
-
-            {sections.map((section) => {
-              const Icon = section.icon;
-              const isActive = activeSection === section.id;
-
-              return (
-                <button
-                  key={section.id}
-                  onClick={() => scrollToSection(section.id)}
-                  className={`
-                    card
-                    text-left
-                    border
-                    transition-all
-                    duration-300
-                    ${
-                      isActive
-                        ? "bg-primary text-primary-content border-primary shadow-xl"
-                        : "bg-base-200 border-base-300 hover:border-primary hover:-translate-y-1"
-                    }
-                  `}
-                >
-                  <div className="card-body">
-
-                    <div
-                      className={`
-                        w-12
-                        h-12
-                        rounded-xl
-                        flex
-                        items-center
-                        justify-center
-                        ${
-                          isActive
-                            ? "bg-primary-content/20"
-                            : "bg-primary text-primary-content"
-                        }
-                      `}
-                    >
-                      <Icon size={25} />
-                    </div>
-
-                    <h2 className="card-title mt-3">
-                      {section.title}
-                    </h2>
-
-                    <p
-                      className={
-                        isActive
-                          ? "opacity-80"
-                          : "opacity-60"
-                      }
-                    >
-                      {section.description}
-                    </p>
-
-                  </div>
-                </button>
-              );
-            })}
-
-          </div>
-
-        </div>
-      </section>
+      </div>
 
       {/* =========================================
           CONTENT
       ========================================= */}
 
-      <section className="px-5 pb-24">
-        <div className="max-w-4xl mx-auto">
+      <div className="relative z-10">
 
-          {/* =====================================
-              SOP
-          ===================================== */}
+        {/* =====================================
+            HERO
+        ===================================== */}
 
-          <section
-            id="sop"
-            className="scroll-mt-8 card bg-base-200 border border-base-300 shadow-xl mb-8"
-          >
-            <div className="card-body">
+        <section className="px-5 pb-16 pt-20 md:pt-28">
 
-              <div className="flex items-center gap-4">
+          <div className="mx-auto max-w-5xl text-center">
 
-                <div className="w-12 h-12 shrink-0 rounded-xl bg-primary text-primary-content flex items-center justify-center">
-                  <ClipboardList size={25} />
-                </div>
+            <p className="mb-5 text-sm font-bold tracking-[0.35em] text-white/70 md:text-base">
+              ASA DIGITAL SPACE
+            </p>
 
-                <div>
-                  <h2 className="text-2xl md:text-3xl font-black">
-                    SOP Jasa Video Editing
-                  </h2>
+            <h1
+              className="
+                text-6xl
+                font-black
+                uppercase
+                leading-[0.85]
+                tracking-[-0.04em]
+                md:text-8xl
+                lg:text-9xl
+              "
+            >
+              Terms
+              <span className="mx-3 md:mx-6">&</span>
+              Condition
+            </h1>
 
-                  <p className="opacity-60">
-                    Standard Operating Procedure
-                  </p>
-                </div>
+            <p className="mx-auto mt-8 max-w-3xl text-sm font-semibold uppercase leading-relaxed text-white/85 md:text-lg">
+              Ketentuan dan kesepakatan antara klien dan freelancer
+              dalam suatu project.
+            </p>
 
-              </div>
+          </div>
 
-              <div className="divider" />
+        </section>
+
+        {/* =====================================
+            SOP
+        ===================================== */}
+
+        <section className="px-5 pb-10">
+
+          <div className="mx-auto max-w-5xl">
+
+            <GlassCard className="p-6 md:p-10">
+
+              <SectionHeader
+                icon={<ClipboardList size={22} />}
+                title="SOP Jasa Video Editing"
+              />
 
               <div className="space-y-4">
 
-                {/* 1 */}
-                <div className="collapse collapse-arrow bg-base-100 border border-base-300">
-                  <input type="checkbox" />
+                {sopItems.map((item) => (
+                  <div
+                    key={item.title}
+                    className="
+                      rounded-2xl
+                      border
+                      border-white/10
+                      bg-black/10
+                      p-5
+                      transition
+                      hover:bg-white/10
+                    "
+                  >
 
-                  <div className="collapse-title font-bold">
-                    1. Persetujuan
-                  </div>
+                    <h3 className="mb-2 text-base font-bold md:text-lg">
+                      {item.title}
+                    </h3>
 
-                  <div className="collapse-content">
-                    <p className="opacity-70 leading-relaxed">
-                      Sebelum melakukan pemesanan atau reservasi jasa
-                      video editing, klien wajib membaca, memahami, dan
-                      menyetujui seluruh ketentuan yang berlaku.
+                    <p className="text-sm leading-relaxed text-white/80 md:text-base">
+                      {item.text}
                     </p>
+
                   </div>
-                </div>
-
-                {/* 2 */}
-                <div className="collapse collapse-arrow bg-base-100 border border-base-300">
-                  <input type="checkbox" />
-
-                  <div className="collapse-title font-bold">
-                    2. Reservasi
-                  </div>
-
-                  <div className="collapse-content">
-                    <p className="opacity-70 leading-relaxed">
-                      Klien mengisi formulir reservasi dengan lengkap
-                      sesuai detail proyek, kemudian mengirimkannya
-                      kepada admin.
-                    </p>
-                  </div>
-                </div>
-
-                {/* 3 */}
-                <div className="collapse collapse-arrow bg-base-100 border border-base-300">
-                  <input type="checkbox" />
-
-                  <div className="collapse-title font-bold">
-                    3. Review Harga
-                  </div>
-
-                  <div className="collapse-content">
-                    <p className="opacity-70 leading-relaxed">
-                      Setelah formulir diterima, admin akan melakukan
-                      peninjauan dan memberikan estimasi biaya jasa
-                      editing berdasarkan kebutuhan proyek.
-                    </p>
-                  </div>
-                </div>
-
-                {/* 4 */}
-                <div className="collapse collapse-arrow bg-base-100 border border-base-300">
-                  <input type="checkbox" />
-
-                  <div className="collapse-title font-bold">
-                    4. Kesepakatan Harga
-                  </div>
-
-                  <div className="collapse-content">
-                    <p className="opacity-70 leading-relaxed">
-                      Setelah estimasi disetujui, proyek dinyatakan deal.
-                      Untuk transaksi di atas Rp50.000, klien wajib
-                      membayar uang muka (DP) sebelum proses editing dimulai.
-                    </p>
-                  </div>
-                </div>
-
-                {/* 5 */}
-                <div className="collapse collapse-arrow bg-base-100 border border-base-300">
-                  <input type="checkbox" />
-
-                  <div className="collapse-title font-bold">
-                    5. Pengiriman Aset
-                  </div>
-
-                  <div className="collapse-content">
-                    <p className="opacity-70 leading-relaxed">
-                      Klien mengirimkan seluruh aset yang diperlukan,
-                      seperti video, logo, naskah, rekaman suara, musik,
-                      maupun materi pendukung lainnya.
-                    </p>
-                  </div>
-                </div>
-
-                {/* 6 */}
-                <div className="collapse collapse-arrow bg-base-100 border border-base-300">
-                  <input type="checkbox" />
-
-                  <div className="collapse-title font-bold">
-                    6. Proses Editing
-                  </div>
-
-                  <div className="collapse-content">
-                    <p className="opacity-70 leading-relaxed">
-                      Editor mengerjakan proyek sesuai dengan brief dan
-                      materi yang telah diberikan oleh klien.
-                    </p>
-                  </div>
-                </div>
-
-                {/* 7 */}
-                <div className="collapse collapse-arrow bg-base-100 border border-base-300">
-                  <input type="checkbox" />
-
-                  <div className="collapse-title font-bold">
-                    7. Review & Revisi
-                  </div>
-
-                  <div className="collapse-content">
-                    <p className="opacity-70 leading-relaxed">
-                      Editor mengirimkan hasil editing tahap pertama
-                      kepada klien untuk ditinjau. Revisi dilakukan
-                      sesuai dengan ketentuan layanan yang berlaku.
-                    </p>
-                  </div>
-                </div>
-
-                {/* 8 */}
-                <div className="collapse collapse-arrow bg-base-100 border border-base-300">
-                  <input type="checkbox" />
-
-                  <div className="collapse-title font-bold">
-                    8. Pelunasan
-                  </div>
-
-                  <div className="collapse-content">
-                    <p className="opacity-70 leading-relaxed">
-                      Setelah seluruh proses review dan revisi selesai
-                      serta hasil akhir telah disetujui, klien wajib
-                      melunasi sisa pembayaran.
-                    </p>
-                  </div>
-                </div>
-
-                {/* 9 */}
-                <div className="collapse collapse-arrow bg-base-100 border border-base-300">
-                  <input type="checkbox" />
-
-                  <div className="collapse-title font-bold">
-                    9. Pengiriman Hasil Akhir
-                  </div>
-
-                  <div className="collapse-content">
-                    <p className="opacity-70 leading-relaxed">
-                      Setelah pembayaran lunas, editor akan mengirimkan
-                      video final dengan kualitas Full HD tanpa watermark.
-                    </p>
-                  </div>
-                </div>
-
-                {/* 10 */}
-                <div className="collapse collapse-arrow bg-base-100 border border-base-300">
-                  <input type="checkbox" />
-
-                  <div className="collapse-title font-bold">
-                    10. Penyimpanan File
-                  </div>
-
-                  <div className="collapse-content">
-                    <p className="opacity-70 leading-relaxed">
-                      File proyek dan hasil akhir akan disimpan di
-                      Google Drive selama 7 (tujuh) hari sejak video
-                      dikirim kepada klien. Setelah masa penyimpanan
-                      berakhir, file akan dihapus secara permanen.
-                      Klien diharapkan segera mengunduh dan menyimpan
-                      file tersebut.
-                    </p>
-                  </div>
-                </div>
+                ))}
 
               </div>
 
-            </div>
-          </section>
+            </GlassCard>
 
-          {/* =====================================
-              KETENTUAN RESERVASI
-          ===================================== */}
+          </div>
 
-          <section
-            id="reservasi"
-            className="scroll-mt-8 card bg-base-200 border border-base-300 shadow-xl mb-8"
-          >
-            <div className="card-body">
+        </section>
 
-              <div className="flex items-center gap-4">
+        {/* =====================================
+            KETENTUAN RESERVASI
+        ===================================== */}
 
-                <div className="w-12 h-12 shrink-0 rounded-xl bg-primary text-primary-content flex items-center justify-center">
-                  <UserCheck size={25} />
-                </div>
+        <section className="px-5 py-10">
 
-                <div>
-                  <h2 className="text-2xl md:text-3xl font-black">
-                    Ketentuan Reservasi
-                  </h2>
+          <div className="mx-auto max-w-5xl">
 
-                  <p className="opacity-60">
-                    Ketentuan sebelum melakukan reservasi
-                  </p>
-                </div>
+            <GlassCard className="p-6 md:p-10">
 
-              </div>
+              <SectionHeader
+                icon={<UserCheck size={22} />}
+                title="Ketentuan Reservasi"
+              />
 
-              <div className="divider" />
+              <BulletList items={reservasiItems} />
 
-              <div className="space-y-3">
+            </GlassCard>
 
-                <div className="alert bg-base-100 border border-base-300">
-                  <span>
-                    Dengan melakukan reservasi, klien dianggap telah
-                    membaca, memahami, dan menyetujui seluruh SOP serta
-                    ketentuan layanan yang berlaku.
-                  </span>
-                </div>
+          </div>
 
-                <div className="alert bg-base-100 border border-base-300">
-                  <span>
-                    Seluruh proses, mulai dari reservasi hingga pelunasan,
-                    mengikuti SOP yang telah ditetapkan demi menjaga
-                    keamanan dan kenyamanan transaksi bagi klien maupun
-                    editor.
-                  </span>
-                </div>
+        </section>
 
-                <div className="alert bg-base-100 border border-base-300">
-                  <span>
-                    Tidak menerima proyek dengan deadline kurang dari
-                    24 jam.
-                  </span>
-                </div>
+        {/* =====================================
+            KETENTUAN KLIEN
+        ===================================== */}
 
-                <div className="alert bg-base-100 border border-base-300">
-                  <span>
-                    Tidak menerima proyek yang mengandung watermark,
-                    promosi, atau unsur judi online, serta konten yang
-                    melanggar hukum atau bersifat menyesatkan.
-                  </span>
-                </div>
+        <section className="px-5 py-10">
 
-                <div className="alert bg-base-100 border border-base-300">
-                  <span>
-                    Paket Basic dan Pro mengharuskan klien memiliki
-                    konsep atau briefing yang jelas sebelum proses
-                    editing dimulai.
-                  </span>
-                </div>
+          <div className="mx-auto max-w-5xl">
 
-                <div className="alert bg-base-100 border border-base-300">
-                  <span>
-                    Reservasi tetap dibuka pada hari Sabtu dan Minggu,
-                    namun proses pengerjaan akan dimulai pada hari kerja
-                    berikutnya.
-                  </span>
-                </div>
+            <GlassCard className="p-6 md:p-10">
 
-                <div className="alert bg-base-100 border border-base-300">
-                  <span>
-                    Klien wajib membaca seluruh ketentuan yang tercantum
-                    pada halaman ini dan highlist instagram{" "}
-                    <strong>@asadigitals_</strong> sebelum melakukan
-                    reservasi.
-                  </span>
-                </div>
+              <SectionHeader
+                icon={<ShieldCheck size={22} />}
+                title="Ketentuan Klien"
+              />
 
-              </div>
+              <BulletList items={klienItems} />
 
-            </div>
-          </section>
+            </GlassCard>
 
-          {/* =====================================
-              KETENTUAN KLIEN
-          ===================================== */}
+          </div>
 
-          <section
-            id="klien"
-            className="scroll-mt-8 card bg-base-200 border border-base-300 shadow-xl mb-8"
-          >
-            <div className="card-body">
+        </section>
 
-              <div className="flex items-center gap-4">
+        {/* =====================================
+            KETENTUAN EDITOR
+        ===================================== */}
 
-                <div className="w-12 h-12 shrink-0 rounded-xl bg-primary text-primary-content flex items-center justify-center">
-                  <ShieldCheck size={25} />
-                </div>
+        <section className="px-5 py-10">
 
-                <div>
-                  <h2 className="text-2xl md:text-3xl font-black">
-                    Ketentuan Klien
-                  </h2>
+          <div className="mx-auto max-w-5xl">
 
-                  <p className="opacity-60">
-                    Ketentuan yang berlaku bagi klien
-                  </p>
-                </div>
+            <GlassCard className="p-6 md:p-10">
 
-              </div>
+              <SectionHeader
+                icon={<UserCog size={22} />}
+                title="Ketentuan Editor"
+              />
 
-              <div className="divider" />
+              <BulletList items={editorItems} />
 
-              <div className="space-y-3">
+            </GlassCard>
 
-                <div className="alert bg-base-100 border border-base-300">
-                  <span>
-                    Pergantian lagu setelah proses editing dimulai tidak
-                    dapat dilakukan. Apabila tetap ingin mengganti lagu,
-                    perubahan tersebut akan dianggap sebagai proyek baru
-                    atau dikenakan biaya tambahan.
-                  </span>
-                </div>
+          </div>
 
-                <div className="alert bg-base-100 border border-base-300">
-                  <span>
-                    Permintaan percepatan deadline tidak tersedia.
-                    Apabila membutuhkan prioritas pengerjaan, klien
-                    dapat memilih layanan Fast Track.
-                  </span>
-                </div>
+        </section>
 
-                <div className="alert bg-base-100 border border-base-300">
-                  <span>
-                    Transaksi di atas Rp50.000 wajib membayar DP minimal
-                    50% sebelum proyek dikerjakan.
-                  </span>
-                </div>
+        {/* =====================================
+            FOOTER
+        ===================================== */}
 
-                <div className="alert bg-base-100 border border-base-300">
-                  <span>
-                    Seluruh aset proyek wajib diunggah ke Google Drive
-                    dan diberi nama yang jelas agar memudahkan proses
-                    editing.
-                  </span>
-                </div>
+        <footer className="px-5 pb-10 pt-16">
 
-                <div className="alert bg-base-100 border border-base-300">
-                  <span>
-                    Briefing yang telah disetujui tidak dapat diubah di
-                    tengah proses pengerjaan. Perubahan konsep akan
-                    dianggap sebagai revisi mayor atau proyek baru.
-                  </span>
-                </div>
+          <div className="mx-auto max-w-5xl text-center">
 
-                <div className="alert bg-base-100 border border-base-300">
-                  <span>
-                    Klien wajib melunasi sisa pembayaran sebelum video
-                    final tanpa watermark dikirimkan.
-                  </span>
-                </div>
+            <div className="mb-5 h-px bg-white/20" />
 
-              </div>
+            <p className="text-sm font-bold tracking-widest">
+              ASA DIGITAL SPACE
+            </p>
 
-            </div>
-          </section>
+            <p className="mt-2 text-xs text-white/50">
+              Dream, Imagine, and Make it True!
+            </p>
 
-          {/* =====================================
-              KETENTUAN EDITOR
-          ===================================== */}
+          </div>
 
-          <section
-            id="editor"
-            className="scroll-mt-8 card bg-base-200 border border-base-300 shadow-xl"
-          >
-            <div className="card-body">
+        </footer>
 
-              <div className="flex items-center gap-4">
-
-                <div className="w-12 h-12 shrink-0 rounded-xl bg-primary text-primary-content flex items-center justify-center">
-                  <UserCog size={25} />
-                </div>
-
-                <div>
-                  <h2 className="text-2xl md:text-3xl font-black">
-                    Ketentuan Editor
-                  </h2>
-
-                  <p className="opacity-60">
-                    Ketentuan dan tanggung jawab editor
-                  </p>
-                </div>
-
-              </div>
-
-              <div className="divider" />
-
-              <div className="space-y-3">
-
-                <div className="alert bg-base-100 border border-base-300">
-                  <span>
-                    Wajib menyelesaikan proyek sesuai deadline yang
-                    telah disepakati.
-                  </span>
-                </div>
-
-                <div className="alert bg-base-100 border border-base-300">
-                  <span>
-                    Menjaga kerahasiaan seluruh data dan aset milik
-                    klien.
-                  </span>
-                </div>
-
-                <div className="alert bg-base-100 border border-base-300">
-                  <span>
-                    Mengerjakan video sesuai briefing dan materi yang
-                    telah diberikan.
-                  </span>
-                </div>
-
-                <div className="alert bg-base-100 border border-base-300">
-                  <span>
-                    Menerima revisi sesuai dengan batas revisi pada
-                    paket yang dipilih.
-                  </span>
-                </div>
-
-                <div className="alert bg-base-100 border border-base-300">
-                  <span>
-                    Berhak menolak proyek yang bertentangan dengan
-                    hukum, etika, atau kebijakan layanan dengan
-                    memberikan penjelasan kepada klien.
-                  </span>
-                </div>
-
-                <div className="alert bg-base-100 border border-base-300">
-                  <span>
-                    File proyek dan hasil akhir akan disimpan selama
-                    7 hari setelah video final dikirim. Setelah masa
-                    penyimpanan berakhir, file dapat dihapus secara
-                    permanen.
-                  </span>
-                </div>
-
-              </div>
-
-            </div>
-          </section>
-
-        </div>
-      </section>
-
-      {/* =========================================
-          FOOTER
-      ========================================= */}
-
-      <footer className="border-t border-base-300">
-
-        <div className="max-w-6xl mx-auto px-5 py-8 text-center">
-
-          <p className="font-bold">
-            Asa Digital Space
-          </p>
-
-          <p className="text-sm opacity-50 mt-1">
-            Dream, Imagine, and Make it True!
-          </p>
-
-        </div>
-
-      </footer>
+      </div>
 
     </main>
   );
